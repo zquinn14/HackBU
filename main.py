@@ -6,3 +6,4 @@ class Word:
 
 
 w = Word("soda", 2)
+ 
