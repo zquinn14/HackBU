@@ -1,3 +1,4 @@
+print("Hello world!")
 class Word:
     
     def __init__(self, wordstr, syllables):
