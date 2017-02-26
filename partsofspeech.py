@@ -8,17 +8,39 @@ from wordToSyl import sylco
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
-tweets.init()
+def generate(statuses, songContents):
 
-statuses = tweets.get_statuses("realDonaldTrump")
+    tweet_sn = set()
+    tweet_pn = set()
+    tweet_a = set()
+
+    for status in statuses:
+        tags = nltk.pos_tag(status)
+
+        for tag in tags:
+            word, part = tag
+
+            if word[0].isupper(): continue
+
+            if part.startswith("N"):
+                if part.endswith("S"):
+                    tweet_pn.update({word})
+                else:
+                    tweet_sn.update({word})
+            elif part.startswith("J"):
+                tweet_a.update({word})
+
+    songWords = []
+
+    for match in re.finditer(r"[a-zA-Z0-9'-]+", songContents):
+        songWords.append(match.group())
 
 
-tweet_sn = set()
-tweet_pn = set()
-tweet_a = set()
+    tags = nltk.pos_tag(songWords)
 
-for status in statuses:
-    tags = nltk.pos_tag(status)
+    song_pn = set()
+    song_sn = set()
+    song_a  = set()
 
     for tag in tags:
         word, part = tag
@@ -27,90 +49,57 @@ for status in statuses:
 
         if part.startswith("N"):
             if part.endswith("S"):
-                tweet_pn.update({word})
+                song_pn.update({word})
             else:
-                tweet_sn.update({word})
+                song_sn.update({word})
         elif part.startswith("J"):
-            tweet_a.update({word})
+            song_a.update({word})
 
-sf = open("Data2.txt", "r")
+    finalLines = []
 
-songContents = sf.read()
+    for line in songContents.split("\n"):
+        if not line:
+            finalLines.append("")
+            continue
 
-sf.close()
+        finalLine = []
+        for word in re.split(r"\s+", line):
+            match = re.match(r"\W*([a-zA-Z0-9'-]+)\W*", word)
+            real_word = match.group(1)
 
-songWords = []
+            scount = sylco(real_word)
 
-for match in re.finditer(r"[a-zA-Z0-9'-]+", songContents):
-    songWords.append(match.group())
+            replacement = real_word
 
+            if real_word in song_pn:
+                matching_syllables = []
 
-tags = nltk.pos_tag(songWords)
+                for tword in tweet_pn:
+                    if sylco(tword) == scount:
+                        matching_syllables.append(tword)
 
-song_pn = set()
-song_sn = set()
-song_a  = set()
+                replacement = random.choice(matching_syllables)
+            if real_word in song_sn:
+                matching_syllables = []
 
-for tag in tags:
-    word, part = tag
+                for tword in tweet_sn:
+                    if sylco(tword) == scount:
+                        matching_syllables.append(tword)
 
-    if word[0].isupper(): continue
+                replacement = random.choice(matching_syllables)
+            if real_word in song_a:
+                matching_syllables = []
 
-    if part.startswith("N"):
-        if part.endswith("S"):
-            song_pn.update({word})
-        else:
-            song_sn.update({word})
-    elif part.startswith("J"):
-        song_a.update({word})
+                for tword in tweet_a:
+                    if sylco(tword) == scount:
+                        matching_syllables.append(tword)
 
-finalLines = []
+                replacement = random.choice(matching_syllables)
 
-for line in songContents.split("\n"):
-    if not line:
-        finalLines.append("")
-        continue
+            replacement = word.replace(real_word, replacement)
 
-    finalLine = []
-    for word in re.split(r"\s+", line):
-        match = re.match(r"\W*([a-zA-Z0-9'-]+)\W*", word)
-        real_word = match.group(1)
+            finalLine.append(replacement)
+        
+        finalLines.append(" ".join(finalLine))
 
-        scount = sylco(real_word)
-
-        replacement = real_word
-
-        if real_word in song_pn:
-            matching_syllables = []
-
-            for tword in tweet_pn:
-                if sylco(tword) == scount:
-                    matching_syllables.append(tword)
-
-            replacement = random.choice(matching_syllables)
-        if real_word in song_sn:
-            matching_syllables = []
-
-            for tword in tweet_sn:
-                if sylco(tword) == scount:
-                    matching_syllables.append(tword)
-
-            replacement = random.choice(matching_syllables)
-        if real_word in song_a:
-            matching_syllables = []
-
-            for tword in tweet_a:
-                if sylco(tword) == scount:
-                    matching_syllables.append(tword)
-
-            replacement = random.choice(matching_syllables)
-
-        replacement = word.replace(real_word, replacement)
-
-        finalLine.append(replacement)
-    
-    finalLines.append(" ".join(finalLine))
-
-
-for line in finalLines:
-    print(line)
+    return "<br/>".join(finalLines)

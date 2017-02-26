@@ -1,5 +1,6 @@
 .idea/
 .vscode/
+venv/
 secrets.json
 tdata/
 __pycache__/

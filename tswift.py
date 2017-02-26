@@ -1,13 +1,3 @@
-#!/usr/bin/env python3
-"""
-Get Taylor Swift Lyrics!
-Actually, this module is more general than just Taylor Swift.  It is a
-MetroLyrics API of sorts, that allows you to get song lyrics and find all songs
-by an artist.  My use case for this API was rather simple, and thus the API
-doesn't have much.  It is mainly useful if you want to get the lyrics of all
-songs written by a certain artist (for example, Taylor Swift).
-"""
-
 from lxml import html
 import requests
 import re
@@ -62,8 +52,10 @@ class Song(object):
 
         tree = html.fromstring(page.text)
         lyric_div = tree.get_element_by_id('lyrics-body-text')
-        verses = [c.text_content() for c in lyric_div]
+        verses = [c.text_content() for c in lyric_div if c.get('id') != "mid-song-discussion"]
         self._lyrics = '\n\n'.join(verses)
+
+        self._lyrics = self._lyrics.replace("\n", "<br/>")
         return self
 
     @property
@@ -73,12 +65,7 @@ class Song(object):
         return self._lyrics
 
     def format(self):
-        return '%s\n%s\n%s\n\n%s' % (
-            self.title,
-            self.artist,
-            '-' * max(len(self.title), len(self.artist)),
-            self.lyrics,
-        )
+       return self.lyrics
 
     def __repr__(self):
         return 'Song(title=%r, artist=%r)' % (self.title, self.artist)
