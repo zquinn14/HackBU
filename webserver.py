@@ -11,12 +11,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-	f = open("static/index.html", "r")
-	fc = f.read()
-
-	f.close()
-
-	return fc
+	return app.send_static_file("index.html")
 
 @app.route("/generate", methods=["POST"])
 def generate():

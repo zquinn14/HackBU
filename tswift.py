@@ -56,6 +56,7 @@ class Song(object):
         self._lyrics = '\n\n'.join(verses)
 
         self._lyrics = self._lyrics.replace("\n", "<br/>")
+
         return self
 
     @property

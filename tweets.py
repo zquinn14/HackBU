@@ -88,7 +88,7 @@ def get_statuses(username):
     for s in statuses:
         clean.append(clean_status(s.text))
     
-    for i in range(40):
+    for i in range(30):
         if not statuses:
             break
         
