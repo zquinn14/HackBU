@@ -39,7 +39,7 @@ class markov(object):
 
     def update_chain(self, word, syllables):
         matching_syllables = []
-        for x in range(len(self.cache[word])-1)
+        for x in range(len(self.cache[word])-1):
             if self.cache[word].syllables == syllables:
                 matching_syllables.append(self.cache[word])
         if len(matching_syllables) != 0:
