@@ -128,5 +128,3 @@ def sylco(word):
 
         # calculate the output
     return numVowels - disc + syls
-
-print(sylco("accuse"));

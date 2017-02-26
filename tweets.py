@@ -11,11 +11,10 @@ import time
 import os
 import os.path
 
-username = "realDonaldTrump"
 secrets_file = "secrets.json"
 data_folder = "tdata"
 cache_file = data_folder + "/tweetcache.json"
-update_interval = 3600
+update_interval = 18000
 
 tapi = None
 
@@ -33,11 +32,16 @@ def use_cache(uname):
     
     cf = open(cache_file, "r")
 
-    ucdata = json.load(cf)[uname]
+    cfdata = json.load(cf)
 
     cf.close()
 
-    return time.time() - ucdata["time"] < 3600
+    if not (uname in cfdata):
+        return False
+
+    ucdata = cfdata[uname]
+
+    return time.time() - ucdata["time"] < 18000
 
 
 def update_cache(uname, statuses):
@@ -47,7 +51,7 @@ def update_cache(uname, statuses):
     cdata = {}
     if os.path.isfile(cache_file):
         cf = open(cache_file, "r")
-        cdata = json.load[cf]
+        cdata = json.load(cf)
         cf.close()
 
     ucdata = {"time": time.time(), "statuses":[]}
@@ -74,15 +78,23 @@ def read_cache(uname):
     return cdata[uname]["statuses"]
 
 
-def get_statuses():
+def get_statuses(username):
     if use_cache(username):
         return read_cache(username)
-    
+
     statuses = tapi.GetUserTimeline(screen_name=username, include_rts=False)
 
     clean = []    
     for s in statuses:
         clean.append(clean_status(s.text))
+    
+    while True:
+        if not statuses:
+            break
+        
+        statuses = tapi.GetUserTimeline(screen_name=username, include_rts=False, max_id=statuses[len(statuses)-1].id)
+        for s in statuses:
+            clean.append(clean_status(s.text))
     
     update_cache(username, clean)
 
@@ -105,6 +117,8 @@ def clean_status(status):
         word = match.group(1)
 
         if len(word) == 1 and word != "I" and word != "i": continue
+
+        if len(word) == 0: continue
         
         clean.append(word)
 
