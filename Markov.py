@@ -12,10 +12,9 @@ class Word:
     def __hash__(self):
         return hash(self.wordstr) + 31*hash(self.syllables)
 
-class markov(object):
-    def __init__(self, open_file):
+class Markov(object):
+    def __init__(self):
         self.cache = {}
-        self.open_file = open_file
         self.firstWords = []
         #self.words = self.file_to_words()
         #self.word_size = len(self.words - 1)
@@ -24,10 +23,10 @@ class markov(object):
     def add_to_chain(self, words):
         self.firstWords.append(words[0])
         for x in range(len(words)-1):
-            if x in self.cache:
-                self.cache[words[x]].append[words[x+1]]
+            if words[x] in self.cache:
+                self.cache[words[x]].append(words[x+1])
             else:
-                self.cache[words[x]] = [words[x]]
+                self.cache[words[x]] = [words[x+1]]
 
     def start_chain(self, syllables):
        matching_syllable = []
@@ -39,9 +38,13 @@ class markov(object):
 
     def update_chain(self, word, syllables):
         matching_syllables = []
-        for x in range(len(self.cache[word])-1)
-            if self.cache[word].syllables == syllables:
-                matching_syllables.append(self.cache[word])
+
+        if not (word in self.cache):
+            return self.start_chain(syllables)
+
+        for x in range(len(self.cache[word])-1):
+            if self.cache[word][x].syllables == syllables:
+                matching_syllables.append(self.cache[word][x])
         if len(matching_syllables) != 0:
             retWord = random.choice(matching_syllables)
             return retWord
@@ -89,7 +92,7 @@ class markov(object):
     def start_chain(syllables):'''
 
 
-words1 = ["hey", " i "]
-print(words1)
-d = markov("Data.txt")
-d.add_to_chain(words1)
+# words1 = ["hey", " i "]
+# print(words1)
+# d = markov("Data.txt")
+# d.add_to_chain(words1)
