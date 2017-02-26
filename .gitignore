@@ -1,3 +1,4 @@
 .idea/
 secrets.json
 tdata/
+__pycache__/
