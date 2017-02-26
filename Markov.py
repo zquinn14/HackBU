@@ -41,6 +41,10 @@ class Markov(object):
     def update_chain(self, word, syllables):
         matching_syllables = []
 
+        for x in range(len(self.cache[word])-1):
+            if self.cache[word].syllables == syllables:
+                matching_syllables.append(self.cache[word])
+
         if not (word in self.cache):
             return self.start_chain(syllables)
 
