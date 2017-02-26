@@ -1,5 +1,5 @@
+#http://eayd.in/?p=232
 import re
-
 
 def sylco(word):
     word = word.lower()
