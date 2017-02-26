@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Little Funny Things</title>
+    <link rel='stylesheet' href='css/bootstrap.css'  type='text/css'/>
+    <link rel='stylesheet' href='css/mymodal.css' type='text/css'/>
+</head>
+<body>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="text-muted">Play with Lyrics</h3>
+            <nav class="navbar navbar-light bg-faded rounded mb-3 img-2" style="background-image: url(images/img1.jpg);">
+                <div class="navbar-toggleable-md">
+                    <ul class="nav navbar-nav text-md-center justify-content-md-between">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#"><h4>Home</h4></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="jumbotron img-1" style="background-image: url(images/img1.jpg);">
+            <h1>Lyrical stuff!</h1>
+            <p class="lead">Hey, I was doing just fine before I met you
+I drink too much and that's an issue but I'm okay</p>
+            <p><button type="button" class="mystart btn btn-info btn-lg" data-toggle="modal" data-target="#mymodal">Get started today</button></p>
+        </div>
+
+        <div id="mymodal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Song selection region</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="simpleForm" role="form">
+                            <div class="form-group">
+                                <label class="col-sm-15 control-label" for="songtitle">Enter song title</label>
+                                <div class="col-sm-15">
+                                    <input type="text" class="form-control" id="songtitle" placeholder="For example, Hey, I was doing just fine before I met you">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-15 control-label" for="twitteraccount">Enter twitter handle</label>
+                                <div class="col-sm-15">
+                                    <input type="text" class="form-control" id="twitteraccount" placeholder="For example, Ronaldo">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                        <!--<button type="button" class="btn btn-primary">Save selection</button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-warning hidden">
+            <strong>Sorry!</strong> We are unable to find the song. Please try again.
+        </div>
+        <div class="row hidden" id="processStat">
+            <div class="col-lg-6">
+                <h2>Blank Space - Original</h2>
+                <p class="song-o"></p>
+                <p class="songolink"></p>
+            </div>
+            <div class="col-lg-6">
+                <h2>Blank Space - Converted</h2>
+                <p class="song-n"></p>
+                <p class="songnlink"></p>
+            </div>
+        </div>
+    </div> <!-- /container -->
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src='http://code.jquery.com/jquery-1.10.1.min.js'></script>
+    <script src='js/bootstrap.js'></script>
+    <script type="text/javascript" src='js/mymodal.js'></script>
+
+</body>
+</html>
