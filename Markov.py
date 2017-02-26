@@ -22,15 +22,17 @@ class Markov(object):
 
     def add_to_chain(self, words):
         self.firstWords.append(words[0])
-        for x in range(len(words)-1):
+        for x in range(len(words)-2):
             if words[x] in self.cache:
-                self.cache[words[x]].append(words[x+1])
+                self.cache[words[x]].append(words[x + 1])
+                self.cache[words[x]].append(words[x + 2])
             else:
-                self.cache[words[x]] = [words[x+1]]
+                self.cache[words[x]] = words[x + 1]
+                self.cache[words[x]] = words[x + 2]
 
     def start_chain(self, syllables):
        matching_syllable = []
-       for x in range(len(self.firstWords)-1):
+       for x in range(len(self.firstWords)-2):
            if self.firstWords[x].syllables == syllables:
                matching_syllable.append(self.firstWords[x])
        retWord = random.choice(matching_syllable)
@@ -42,7 +44,7 @@ class Markov(object):
         if not (word in self.cache):
             return self.start_chain(syllables)
 
-        for x in range(len(self.cache[word])-1):
+        for x in range(len(self.cache[word])-2):
             if self.cache[word][x].syllables == syllables:
                 matching_syllables.append(self.cache[word][x])
         if len(matching_syllables) != 0:
